@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Address } from '../../types/types';
-import { MapPin, Plus, Trash2, X, Save } from 'lucide-react';
+import { MapPin, Plus, Trash2, X, Save, Edit } from 'lucide-react';
 
 interface Props {
   addresses: Address[];
@@ -11,8 +11,7 @@ export default function AddressSection({ addresses, onChange }: Props) {
   const [showForm, setShowForm] = useState(false);
   const [newAddress, setNewAddress] = useState<Partial<Address>>({});
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [hasLocalChanges, setHasLocalChanges] = useState(false);
-  const [originalAddresses, setOriginalAddresses] = useState(addresses);
+  const [editingAddressId, setEditingAddressId] = useState<string | null>(null);
 
   const validateAddress = () => {
     const validationErrors: Record<string, string> = {};
@@ -37,63 +36,63 @@ export default function AddressSection({ addresses, onChange }: Props) {
     return Object.keys(validationErrors).length === 0;
   };
 
-  const handleAdd = () => {
+  const handleSave = () => {
     if (!validateAddress()) return;
-    
-    if (addresses.length >= 3) {
-      alert('Maximum 3 addresses allowed');
-      return;
-    }
 
-    const updatedAddresses = [
-      ...addresses,
-      {
-        ...newAddress,
-        id: Date.now().toString(),
-      } as Address,
-    ];
-    
+    const updatedAddresses = editingAddressId
+      ? addresses.map((address) =>
+          address.id === editingAddressId
+            ? { ...address, ...newAddress }
+            : address
+        )
+      : [
+          ...addresses,
+          {
+            ...newAddress,
+            id: Date.now().toString(),
+          } as Address,
+        ];
+
     onChange(updatedAddresses);
-    setHasLocalChanges(true);
     setShowForm(false);
     setNewAddress({});
-  };
-
-  const handleSave = () => {
-    setOriginalAddresses(addresses);
-    setHasLocalChanges(false);
+    setEditingAddressId(null); // Reset the editing ID
   };
 
   const handleCancel = () => {
-    onChange(originalAddresses);
-    setHasLocalChanges(false);
+    setShowForm(false);
+    setNewAddress({});
+    setEditingAddressId(null); // Reset the editing ID
   };
 
   const handleDelete = (id: string) => {
     const updatedAddresses = addresses.filter((address) => address.id !== id);
     onChange(updatedAddresses);
-    setHasLocalChanges(true);
+  };
+
+  const handleEdit = (id: string) => {
+    const addressToEdit = addresses.find((address) => address.id === id);
+    if (addressToEdit) {
+      setNewAddress(addressToEdit);
+      setEditingAddressId(id); // Set the address being edited
+      setShowForm(true);
+    }
   };
 
   return (
     <div className="p-8">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-semibold text-gray-900">Delivery Addresses</h2>
-        {!showForm && addresses.length < 3 && (
-          <button
-            onClick={() => setShowForm(true)}
-            className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700"
-          >
-            <Plus className="h-5 w-5 mr-2" />
-            Add Address
-          </button>
-        )}
       </div>
 
-      {hasLocalChanges && (
-        <div className="mb-4 p-4 bg-amber-50 border border-amber-200 rounded-md">
-          <p className="text-amber-600 text-sm">You have unsaved changes</p>
-        </div>
+      {!showForm && addresses.length < 3 && (
+        <button
+          onClick={() => setShowForm(true)}
+          className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700"
+        >
+          <Plus className="h-5 w-5 mr-2" />
+          Add Address
+        </button>
       )}
 
       {showForm && (
@@ -202,7 +201,7 @@ export default function AddressSection({ addresses, onChange }: Props) {
                   type="text"
                   value={newAddress.zipCode || ''}
                   onChange={(e) =>
-                    setNewAddress({ ...newAddress, zipCode: e.target.value.replace(/\D/g, '') })
+                    setNewAddress({ ...newAddress, zipCode: e.target.value })
                   }
                   className={`w-full rounded-lg border ${
                     errors.zipCode ? 'border-red-500' : 'border-gray-300'
@@ -230,79 +229,59 @@ export default function AddressSection({ addresses, onChange }: Props) {
 
             <div className="flex justify-end space-x-3">
               <button
-                onClick={() => {
-                  setShowForm(false);
-                  setErrors({});
-                }}
+                onClick={handleCancel}
                 className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
               >
                 Cancel
               </button>
               <button
-                onClick={handleAdd}
+                onClick={handleSave}
                 className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700"
               >
-                Add Address
+                Save
               </button>
             </div>
           </div>
         </div>
       )}
 
-      <div className="space-y-4">
-        {addresses.map((address) => (
-          <div
-            key={address.id}
-            className="p-6 border rounded-lg hover:shadow-md transition-shadow"
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <MapPin className="h-6 w-6 text-gray-400" />
-                <div>
-                  <div className="flex items-center">
-                    <p className="font-medium">{address.label}</p>
-                  </div>
-                  <p className="text-gray-600">
-                    {address.line1}
-                    {address.line2 && `, ${address.line2}`}
-                  </p>
-                  <p className="text-sm text-gray-500">
-                    {address.city}, {address.state} {address.zipCode}
-                  </p>
-                  {address.landmark && (
-                    <p className="text-sm text-gray-500">
-                      Landmark: {address.landmark}
+      {!showForm && addresses.length > 0 && (
+        <div className="space-y-4">
+          {addresses.map((address) => (
+            <div
+              key={address.id}
+              className="p-6 border rounded-lg hover:shadow-md transition-shadow relative"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <MapPin className="h-6 w-6 text-gray-400" />
+                  <div>
+                    <div className="flex items-center">
+                      <p className="font-medium">{address.label}</p>
+                    </div>
+                    <p className="text-sm text-gray-600">
+                      {address.line1}, {address.line2 && `${address.line2},`} {address.city}, {address.state}{' '}
+                      {address.zipCode}
                     </p>
-                  )}
+                  </div>
+                </div>
+                <div className="absolute top-2 right-2 flex items-center space-x-2">
+                  <button
+                    onClick={() => handleEdit(address.id)}
+                    className="text-blue-800"
+                  >
+                    <Edit className="h-5 w-5" />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(address.id)}
+                    className="text-red-600 hover:text-red-800"
+                  >
+                    <Trash2 className="h-5 w-5" />
+                  </button>
                 </div>
               </div>
-              <button
-                onClick={() => handleDelete(address.id)}
-                className="text-red-600 hover:text-red-700"
-              >
-                <Trash2 className="h-5 w-5" />
-              </button>
             </div>
-          </div>
-        ))}
-      </div>
-
-      {hasLocalChanges && (
-        <div className="flex justify-end space-x-3 mt-6">
-          <button
-            onClick={handleCancel}
-            className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
-          >
-            <X className="h-4 w-4 mr-2 inline" />
-            Cancel Changes
-          </button>
-          <button
-            onClick={handleSave}
-            className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700"
-          >
-            <Save className="h-4 w-4 mr-2 inline" />
-            Save Changes
-          </button>
+          ))}
         </div>
       )}
     </div>

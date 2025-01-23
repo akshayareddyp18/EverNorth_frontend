@@ -86,15 +86,6 @@ export default function ProfileHeader({ profile }: Props) {
               </div>
             </div>
           </div>
-
-          <button
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
-            onClick={() => {
-              // TODO: Implement edit profile functionality
-            }}
-          >
-            Edit Profile
-          </button>
         </div>
       </div>
     </div>

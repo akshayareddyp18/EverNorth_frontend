@@ -17,7 +17,37 @@ const commonConditions = [
   'Depression',
   'Anxiety',
   'Migraine',
-  'Chronic Pain'
+  'Chronic Pain',
+  'Obesity',
+  'Cancer',
+  'Stroke',
+  'Chronic Obstructive Pulmonary Disease (COPD)',
+  'Sleep Apnea',
+  'Kidney Disease',
+  'Liver Disease',
+  'Parkinson’s Disease',
+  'Multiple Sclerosis',
+  'Epilepsy',
+  'Alzheimer’s Disease',
+  'Parkinson’s Disease',
+  'Multiple Sclerosis',
+  'Chronic Fatigue Syndrome',
+  'Endometriosis',
+  'Autism Spectrum Disorder',
+  'Attention Deficit Hyperactivity Disorder (ADHD)',
+  'Schizophrenia',
+  'Bipolar Disorder',
+  'Gastritis',
+  'Irritable Bowel Syndrome (IBS)',
+  'HIV/AIDS',
+  'Tuberculosis (TB)',
+  'Osteoporosis',
+  'Sickle Cell Disease',
+  'Gout',
+  'Psoriasis',
+  'Eczema',
+  'Bronchitis',
+  'Pneumonia'
 ];
 
 const commonAllergies = [
@@ -30,7 +60,29 @@ const commonAllergies = [
   'Fish',
   'Shellfish',
   'Dust',
-  'Pollen'
+  'Pollen',
+  'Latex',
+  'Insect Stings',
+  'Penicillin',
+  'Aspirin',
+  'Ibuprofen',
+  'Sulfa Drugs',
+  'Eggplant',
+  'Tomatoes',
+  'Citrus Fruits',
+  'Chocolate',
+  'Gluten',
+  'Sesame Seeds',
+  'Dairy Products',
+  'Perfumes/Cosmetics',
+  'Animal Dander (Cats, Dogs)',
+  'Mold',
+  'Cigarette Smoke',
+  'Pollens (Grass, Ragweed)',
+  'Sun Exposure (Sunburns)',
+  'Food Additives (MSG, Sulfites)',
+  'Nickel (Metal Allergies)',
+  'Medicines (Aspirin, Ibuprofen)'
 ];
 
 export default function HealthSection({ healthInfo, onChange }: Props) {
@@ -43,7 +95,7 @@ export default function HealthSection({ healthInfo, onChange }: Props) {
   const [conditionDescription, setConditionDescription] = useState('');
 
   useEffect(() => {
-    if (newCondition.length > 0) {
+    if (newCondition.length >= 3) {
       setConditionSuggestions(
         commonConditions.filter(condition =>
           condition.toLowerCase().includes(newCondition.toLowerCase())
@@ -55,7 +107,7 @@ export default function HealthSection({ healthInfo, onChange }: Props) {
   }, [newCondition]);
 
   useEffect(() => {
-    if (newAllergy.length > 0) {
+    if (newAllergy.length >= 3) {
       setAllergySuggestions(
         commonAllergies.filter(allergy =>
           allergy.toLowerCase().includes(newAllergy.toLowerCase())

@@ -6,7 +6,7 @@ import PaymentMethods from '../components/profile/PaymentCard';
 import AddressSection from '../components/profile/AddressCard';
 import HealthSection from '../components/profile/HealthCard';
 import DependentSection from '../components/profile/DependentCard';
-import { Save, X, Phone, CreditCard, MapPin, Heart, Users } from 'lucide-react';
+import { Phone, CreditCard, MapPin, Heart, Users } from 'lucide-react';
 import { validateProfile } from '../utils/validation';
 import toast from 'react-hot-toast';
 
@@ -32,12 +32,11 @@ export default function ProfilePage() {
   });
 
   const [originalProfile, setOriginalProfile] = useState<UserProfile>(profile);
-  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [validationErrors, setValidationErrors] = useState<ValidationErrors>({});
 
   // Compare the current profile with the original profile to track changes
   useEffect(() => {
-    setHasUnsavedChanges(JSON.stringify(profile) !== JSON.stringify(originalProfile));
+    JSON.stringify(profile) !== JSON.stringify(originalProfile);
   }, [profile, originalProfile]);
 
   // Calculate profile completion progress
@@ -54,35 +53,6 @@ export default function ProfilePage() {
 
     const completedFields = fields.filter(Boolean).length;
     return (completedFields / fields.length) * 100;
-  };
-
-  // Save the profile and validate
-  const handleSave = async () => {
-    const validationErrors = validateProfile(profile);
-
-    if (Object.keys(validationErrors).length > 0) {
-      setValidationErrors(validationErrors);
-      toast.error('Please fix the validation errors');
-      return;
-    }
-
-    try {
-      // Simulate API save
-      console.log('Saving profile:', profile);
-      setOriginalProfile(profile);
-      setHasUnsavedChanges(false);
-      setValidationErrors({}); // Clear validation errors after successful save
-      toast.success('Profile saved successfully');
-    } catch (error) {
-      toast.error('Failed to save profile');
-    }
-  };
-
-  // Cancel the changes and reset the profile to original state
-  const handleCancel = () => {
-    setProfile(originalProfile);
-    setHasUnsavedChanges(false);
-    setValidationErrors({}); // Clear validation errors on cancel
   };
 
   // Render active tab content based on the current state
@@ -106,7 +76,7 @@ export default function ProfilePage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header Section */}
-      <ProfileHeader profile={profile} progress={calculateProgress()} hasUnsavedChanges={hasUnsavedChanges} />
+      <ProfileHeader profile={profile} progress={calculateProgress()} />
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -154,26 +124,6 @@ export default function ProfilePage() {
             <div className="bg-white shadow rounded-lg">{renderActiveTab()}</div>
           </div>
         </div>
-
-        {/* Action Buttons */}
-        {hasUnsavedChanges && (
-          <div className="fixed bottom-6 right-6 flex space-x-4">
-            <button
-              onClick={handleCancel}
-              className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-            >
-              <X className="h-4 w-4 mr-2" />
-              Cancel
-            </button>
-            <button
-              onClick={handleSave}
-              className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-            >
-              <Save className="h-4 w-4 mr-2" />
-              Save Changes
-            </button>
-          </div>
-        )}
       </div>
     </div>
   );

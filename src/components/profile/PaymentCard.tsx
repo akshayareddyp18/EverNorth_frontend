@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { PaymentMethod } from '../../types/types';
-import { CreditCard, Plus, Trash2, X, Save } from 'lucide-react';
+import { CreditCard, Plus, Trash2, X, Save, Edit } from 'lucide-react';
 
 interface Props {
   methods: PaymentMethod[];
@@ -14,8 +14,10 @@ export default function PaymentMethods({ methods, onChange }: Props) {
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [hasLocalChanges, setHasLocalChanges] = useState(false);
-  const [originalMethods, setOriginalMethods] = useState(methods);
+  const [isEditable, setIsEditable] = useState(false);
+  const [editingMethod, setEditingMethod] = useState<PaymentMethod | null>(null);
 
+  // Validate payment method
   const validatePaymentMethod = () => {
     const validationErrors: Record<string, string> = {};
     
@@ -39,36 +41,48 @@ export default function PaymentMethods({ methods, onChange }: Props) {
     return Object.keys(validationErrors).length === 0;
   };
 
-  const handleAdd = () => {
+  const handleSave = () => {
     if (!validatePaymentMethod()) return;
     
-    if (methods.length >= 1) {
-      alert('Only one payment method allowed');
-      return;
+    let updatedMethods;
+    if (editingMethod) {
+      updatedMethods = methods.map((method) =>
+        method.id === editingMethod.id ? { ...method, ...newMethod } : method
+      );
+    } else {
+      updatedMethods = [
+        ...methods,
+        { ...newMethod, id: Date.now().toString() } as PaymentMethod,
+      ];
     }
 
-    const updatedMethods = [
-      ...methods,
-      {
-        ...newMethod,
-        id: Date.now().toString(),
-      } as PaymentMethod,
-    ];
-    
     onChange(updatedMethods);
-    setHasLocalChanges(true);
+    setHasLocalChanges(false);
     setShowForm(false);
+    setIsEditable(false);
+    setEditingMethod(null); // Reset editing mode
     setNewMethod({ type: 'credit' });
   };
 
-  const handleSave = () => {
-    setOriginalMethods(methods);
-    setHasLocalChanges(false);
+  const handleEdit = (method: PaymentMethod) => {
+    setIsEditable(true);
+    setShowForm(true);
+    setEditingMethod(method);
+    setNewMethod({ ...method }); // Pre-populate form with existing details
+  };
+
+  const handleAddPayment = () => {
+    setIsEditable(true);
+    setShowForm(true);
+    setNewMethod({ type: 'credit' }); // Reset form for new method
+    setEditingMethod(null); // No editing for new method
   };
 
   const handleCancel = () => {
-    onChange(originalMethods);
-    setHasLocalChanges(false);
+    setShowForm(false);
+    setIsEditable(false);
+    setNewMethod({ type: 'credit' });
+    setEditingMethod(null);
   };
 
   const handleDelete = (id: string) => {
@@ -81,16 +95,26 @@ export default function PaymentMethods({ methods, onChange }: Props) {
     <div className="p-8">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-semibold text-gray-900">Payment Method</h2>
-        {!showForm && methods.length === 0 && (
+        {!isEditable && methods.length > 0 && (
           <button
-            onClick={() => setShowForm(true)}
-            className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700"
+            onClick={() => handleEdit(methods[0])} // Edit the first method for simplicity
+            className="inline-flex items-center text-sm text-white bg-blue-600 hover:bg-blue-700 py-2 px-4 rounded-md"
           >
-            <Plus className="h-5 w-5 mr-2" />
-            Add Payment Method
+            <Edit className="h-5 w-5 mr-2" />
+            Edit
           </button>
         )}
       </div>
+
+      {!showForm && methods.length === 0 && (
+        <button
+          onClick={handleAddPayment}
+          className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 mt-4"
+        >
+          <Plus className="h-5 w-5 mr-2" />
+          Add Payment Method
+        </button>
+      )}
 
       {hasLocalChanges && (
         <div className="mb-4 p-4 bg-amber-50 border border-amber-200 rounded-md">
@@ -135,6 +159,7 @@ export default function PaymentMethods({ methods, onChange }: Props) {
                       errors.cardNumber ? 'border-red-500' : 'border-gray-300'
                     } shadow-sm py-3 px-4 focus:ring-2 focus:ring-blue-500`}
                     placeholder="Enter 16-digit card number"
+                    disabled={!isEditable}
                   />
                   {errors.cardNumber && (
                     <p className="text-red-500 text-sm">{errors.cardNumber}</p>
@@ -155,6 +180,7 @@ export default function PaymentMethods({ methods, onChange }: Props) {
                       errors.nameOnCard ? 'border-red-500' : 'border-gray-300'
                     } shadow-sm py-3 px-4 focus:ring-2 focus:ring-blue-500`}
                     placeholder="Enter name as shown on card"
+                    disabled={!isEditable}
                   />
                   {errors.nameOnCard && (
                     <p className="text-red-500 text-sm">{errors.nameOnCard}</p>
@@ -181,6 +207,7 @@ export default function PaymentMethods({ methods, onChange }: Props) {
                       } shadow-sm py-3 px-4 focus:ring-2 focus:ring-blue-500`}
                       placeholder="MM/YY"
                       maxLength={5}
+                      disabled={!isEditable}
                     />
                     {errors.expiryDate && (
                       <p className="text-red-500 text-sm">{errors.expiryDate}</p>
@@ -197,29 +224,27 @@ export default function PaymentMethods({ methods, onChange }: Props) {
                         setNewMethod({ ...newMethod, cardType: e.target.value })
                       }
                       className="w-full rounded-lg border border-gray-300 shadow-sm py-3 px-4 focus:ring-2 focus:ring-blue-500"
+                      disabled={!isEditable}
                     >
-                      <option value="">Select Type</option>
-                      <option value="visa">Visa</option>
-                      <option value="mastercard">Mastercard</option>
+                      <option value="Visa">Visa</option>
+                      <option value="MasterCard">MasterCard</option>
+                      <option value="AmericanExpress">American Express</option>
                     </select>
                   </div>
                 </div>
               </>
             ) : (
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700">
-                  UPI ID
-                </label>
+                <label className="block text-sm font-medium text-gray-700">UPI ID</label>
                 <input
                   type="text"
                   value={newMethod.upiId || ''}
-                  onChange={(e) =>
-                    setNewMethod({ ...newMethod, upiId: e.target.value })
-                  }
+                  onChange={(e) => setNewMethod({ ...newMethod, upiId: e.target.value })}
                   className={`w-full rounded-lg border ${
                     errors.upiId ? 'border-red-500' : 'border-gray-300'
                   } shadow-sm py-3 px-4 focus:ring-2 focus:ring-blue-500`}
-                  placeholder="username@upi"
+                  placeholder="Enter your UPI ID"
+                  disabled={!isEditable}
                 />
                 {errors.upiId && (
                   <p className="text-red-500 text-sm">{errors.upiId}</p>
@@ -227,78 +252,55 @@ export default function PaymentMethods({ methods, onChange }: Props) {
               </div>
             )}
 
-            <div className="flex justify-end space-x-3">
+            <div className="flex justify-between">
               <button
-                onClick={() => {
-                  setShowForm(false);
-                  setErrors({});
-                }}
-                className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
+                onClick={handleCancel}
+                className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
               >
+                <X className="h-5 w-5 mr-2" />
                 Cancel
               </button>
-              <button
-                onClick={handleAdd}
-                className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700"
-              >
-                Add Payment Method
-              </button>
+              <div className="flex gap-2">
+                <button
+                  onClick={handleSave}
+                  className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700"
+                >
+                  <Save className="h-5 w-5 mr-2" />
+                  Save
+                </button>
+              </div>
             </div>
           </div>
         </div>
       )}
 
-      <div className="space-y-4">
-        {methods.map((method) => (
-          <div
-            key={method.id}
-            className="p-6 border rounded-lg hover:shadow-md transition-shadow"
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <CreditCard className="h-6 w-6 text-gray-400" />
-                <div>
-                  {method.type === 'upi' ? (
-                    <p className="font-medium">{method.upiId}</p>
-                  ) : (
-                    <>
-                      <p className="font-medium">
-                        {method.nameOnCard} - **** {method.cardNumber?.slice(-4)}
-                      </p>
-                      <p className="text-sm text-gray-500">
-                        Expires {method.expiryDate} • {method.cardType}
-                      </p>
-                    </>
-                  )}
+      {!showForm && methods.length > 0 && (
+        <div className="space-y-6">
+          {methods.map((method) => (
+            <div
+              key={method.id}
+              className="flex justify-between items-center bg-white border rounded-lg p-4"
+            >
+              <div className="flex items-center">
+                <div className="space-y-1">
+                  <p className="text-sm font-semibold text-gray-900">
+                    {method.type === 'upi'
+                      ? `UPI ID: ${method.upiId}`
+                      : `${method.nameOnCard} - ${method.cardNumber?.slice(-4)}`}
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    Expiry: {method.expiryDate}
+                  </p>
                 </div>
               </div>
               <button
                 onClick={() => handleDelete(method.id)}
-                className="text-red-600 hover:text-red-700"
+                className="text-red-600 hover:text-red-800"
               >
                 <Trash2 className="h-5 w-5" />
               </button>
             </div>
-          </div>
-        ))}
-      </div>
-
-      {hasLocalChanges && (
-        <div className="flex justify-end space-x-3 mt-6">
-          <button
-            onClick={handleCancel}
-            className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
-          >
-            <X className="h-4 w-4 mr-2 inline" />
-            Cancel Changes
-          </button>
-          <button
-            onClick={handleSave}
-            className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700"
-          >
-            <Save className="h-4 w-4 mr-2 inline" />
-            Save Changes
-          </button>
+          ))}
         </div>
       )}
     </div>
