@@ -6,7 +6,7 @@ import Navbar from './components/shared/Navbar';
 import { AuthProvider } from './context/AuthContext';
 import { Toaster } from 'react-hot-toast';
 import Signup from './pages/Signup';
-import Welcome from './pages/welcome';
+import Welcome from './pages/Welcome';
 
 function App() {
   return (

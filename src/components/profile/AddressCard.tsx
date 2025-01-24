@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Address } from '../../types/types';
-import { MapPin, Plus, Trash2, X, Save, Edit } from 'lucide-react';
+import { MapPin, Plus, Trash2, Edit } from 'lucide-react';
 
 interface Props {
   addresses: Address[];
@@ -15,7 +15,7 @@ export default function AddressSection({ addresses, onChange }: Props) {
 
   const validateAddress = () => {
     const validationErrors: Record<string, string> = {};
-    
+
     if (!newAddress.line1 || newAddress.line1.length < 5) {
       validationErrors.line1 = 'Address line 1 must be at least 5 characters';
     }
@@ -56,13 +56,13 @@ export default function AddressSection({ addresses, onChange }: Props) {
     onChange(updatedAddresses);
     setShowForm(false);
     setNewAddress({});
-    setEditingAddressId(null); // Reset the editing ID
+    setEditingAddressId(null);
   };
 
   const handleCancel = () => {
     setShowForm(false);
     setNewAddress({});
-    setEditingAddressId(null); // Reset the editing ID
+    setEditingAddressId(null);
   };
 
   const handleDelete = (id: string) => {
@@ -74,17 +74,15 @@ export default function AddressSection({ addresses, onChange }: Props) {
     const addressToEdit = addresses.find((address) => address.id === id);
     if (addressToEdit) {
       setNewAddress(addressToEdit);
-      setEditingAddressId(id); // Set the address being edited
+      setEditingAddressId(id);
       setShowForm(true);
     }
   };
 
   return (
     <div className="p-8">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-semibold text-gray-900">Delivery Addresses</h2>
-      </div>
-
+    <div className="flex justify-between items-center mb-6">
+      <h2 className="text-2xl font-semibold text-gray-900">Delivery Addresses</h2>
       {!showForm && addresses.length < 3 && (
         <button
           onClick={() => setShowForm(true)}
@@ -94,6 +92,8 @@ export default function AddressSection({ addresses, onChange }: Props) {
           Add Address
         </button>
       )}
+    </div>
+
 
       {showForm && (
         <div className="mb-6 p-6 border rounded-lg bg-gray-50">
@@ -238,7 +238,7 @@ export default function AddressSection({ addresses, onChange }: Props) {
                 onClick={handleSave}
                 className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700"
               >
-                Save
+                {editingAddressId ? 'Save Changes' : 'Save'}
               </button>
             </div>
           </div>
@@ -260,21 +260,24 @@ export default function AddressSection({ addresses, onChange }: Props) {
                       <p className="font-medium">{address.label}</p>
                     </div>
                     <p className="text-sm text-gray-600">
-                      {address.line1}, {address.line2 && `${address.line2},`} {address.city}, {address.state}{' '}
+                      {address.line1}, {address.city}, {address.state} -{' '}
                       {address.zipCode}
                     </p>
+                    {address.line2 && (
+                      <p className="text-sm text-gray-600">{address.line2}</p>
+                    )}
                   </div>
                 </div>
-                <div className="absolute top-2 right-2 flex items-center space-x-2">
+                <div className="flex space-x-3">
                   <button
                     onClick={() => handleEdit(address.id)}
-                    className="text-blue-800"
+                    className="text-blue-500 hover:text-blue-700"
                   >
                     <Edit className="h-5 w-5" />
                   </button>
                   <button
                     onClick={() => handleDelete(address.id)}
-                    className="text-red-600 hover:text-red-800"
+                    className="text-red-500 hover:text-red-700"
                   >
                     <Trash2 className="h-5 w-5" />
                   </button>

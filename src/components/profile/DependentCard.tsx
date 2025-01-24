@@ -98,6 +98,19 @@ export default function DependentSection({ dependents, onChange }: Props) {
     setNewDependent({ ...dependent });
     setShowForm(true);
   };
+  const handleCancel = () => {
+    setEditingDependent(null);
+    setNewDependent({});
+    setErrors({
+      name: '',
+      relation: '',
+      dateOfBirth: '',
+      mobileNumber: '',
+      email: ''
+    });
+    setShowForm(false);
+  };
+  
 
   const handleSaveEdit = () => {
     if (editingDependent) {
@@ -223,86 +236,70 @@ export default function DependentSection({ dependents, onChange }: Props) {
           </div>
 
           <div className="flex justify-end space-x-3 mt-6">
+          <button
+                onClick={handleCancel}
+                className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+              >
+                Cancel
+          </button>
+
+
             <button
-              onClick={() => setShowForm(false)}
-              className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              onClick={editingDependent ? handleSaveEdit : handleAdd}
+              className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
-              Cancel
+              {editingDependent ? 'Save Changes' : 'Save'}
             </button>
-            {editingDependent ? (
-              <button
-                onClick={handleSaveEdit}
-                className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-              >
-                Save Changes
-              </button>
-            ) : (
-              <button
-                onClick={handleAdd}
-                className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-              >
-                Save
-              </button>
-            )}
           </div>
         </div>
       )}
 
-      <div className="space-y-4">
+      <div>
         {dependents.map((dependent) => (
-          <div
-            key={dependent.id}
-            className="p-6 border rounded-lg hover:shadow-md transition-shadow"
-          >
-            <div className="flex justify-between items-start">
-              <div className="space-y-2">
-                <div className="flex items-center">
-                  <h3 className="text-lg font-medium text-gray-900">{dependent.name}</h3>
-                  {dependent.isEmergencyContact && (
-                    <span className="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                      Emergency Contact
-                    </span>
-                  )}
-                </div>
-                <p className="text-sm text-gray-500">
-                  {dependent.relation.charAt(0).toUpperCase() + dependent.relation.slice(1)}
-                </p>
-                <p className="text-sm text-gray-500">
-                  Date of Birth: {dependent.dateOfBirth}
-                </p>
+          <div key={dependent.id} className="flex justify-between items-center mb-6 p-4 bg-white rounded-lg shadow-sm">
+            {editingDependent?.id !== dependent.id && (
+              <div>
+                <p className="font-semibold">{dependent.name}</p>
+                <p className="text-sm text-gray-500">{dependent.relation}</p>
+                <p className="text-sm text-gray-500">Date of Birth: {dependent.dateOfBirth}</p>
                 <p className="text-sm text-gray-500">Phone: {dependent.mobileNumber}</p>
                 <p className="text-sm text-gray-500">Email: {dependent.email}</p>
               </div>
+            )}
 
-              <div className="flex items-center space-x-4">
-                <button
-                  onClick={() => handleEdit(dependent)}
-                  className="text-blue-500 hover:text-blue-600 focus:outline-none"
-                >
-                  <Edit className="h-5 w-5" />
-                </button>
-                <button
-                  onClick={() => handleDelete(dependent.id)}
-                  className="text-red-500 hover:text-red-600 focus:outline-none"
-                >
-                  <Trash2 className="h-5 w-5" />
-                </button>
-                <button
-                  onClick={() => toggleEmergencyContact(dependent.id)}
-                  className={`${
-                    dependent.isEmergencyContact ? 'text-red-500' : 'text-gray-500'
-                  } hover:text-red-600 focus:outline-none`}
-                >
-                  <AlertCircle className="h-5 w-5" />
-                </button>
-              </div>
-            </div>
+<div className="flex items-center space-x-4">
+  {!editingDependent || editingDependent.id !== dependent.id ? (
+    <>
+      <button
+        onClick={() => handleEdit(dependent)}
+        className="text-blue-500 hover:text-blue-600 focus:outline-none"
+      >
+        <Edit className="h-5 w-5" />
+      </button>
+      <button
+        onClick={() => handleDelete(dependent.id)}
+        className="text-red-500 hover:text-red-600 focus:outline-none"
+      >
+        <Trash2 className="h-5 w-5" />
+      </button>
+      <button
+        onClick={() => toggleEmergencyContact(dependent.id)}
+        className={`${
+          dependent.isEmergencyContact ? 'text-red-500' : 'text-gray-500'
+        } hover:text-red-600 focus:outline-none`}
+      >
+        <AlertCircle className="h-5 w-5" />
+      </button>
+    </>
+  ) : null}
+</div>
+
           </div>
         ))}
       </div>
 
-      {/* Emergency SOS Button */}
-      {dependents.length > 0 && (
+       {/* Emergency SOS Button */}
+       {dependents.length > 0 && (
         <div className="mt-8 text-center">
           <button
             onClick={handleEmergencySOS}
