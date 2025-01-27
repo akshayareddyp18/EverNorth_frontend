@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
 import Login from './pages/Login';
+import OTPValidation from './pages/OTPValidation';
 import Profile from './pages/Profile';
 import Navbar from './components/shared/Navbar';
 import { AuthProvider } from './context/AuthContext';
@@ -19,6 +20,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/Login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/otp-validation" element={<OTPValidation />} />
             <Route path="/welcome" element={<Welcome />} /> 
             <Route path="/profile-setup" element={<Profile />} />
             <Route path="*" element={<Navigate to="/" replace />} />

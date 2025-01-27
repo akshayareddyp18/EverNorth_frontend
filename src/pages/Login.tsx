@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { UserCheck, Calendar, Phone, ArrowLeft } from "lucide-react";
+import { UserCheck, Phone, ArrowLeft } from "lucide-react";
 import Input from "../components/shared/Input";
 import Button from "../components/shared/Button";
 import { useAuth } from "../context/AuthContext";
@@ -8,7 +8,6 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import {
   validateMemberId,
-  validateDOB,
   validateMobile,
   validateOTP,
 } from "../utils/validation";
@@ -18,13 +17,11 @@ const Login: React.FC = () => {
   const { login } = useAuth();
   const [formData, setFormData] = useState({
     memberId: "",
-    dateOfBirth: "",
     contactNo: "",
     otp: "",
   });
   const [errors, setErrors] = useState({
     memberId: "",
-    dateOfBirth: "",
     contactNo: "",
     otp: "",
   });
@@ -45,7 +42,6 @@ const Login: React.FC = () => {
   const validateForm = (): boolean => {
     const newErrors = {
       memberId: validateMemberId(formData.memberId) || "",
-      dateOfBirth: validateDOB(formData.dateOfBirth) || "",
       contactNo: validateMobile(formData.contactNo) || "",
       otp: showOTP ? validateOTP(formData.otp) || "" : "",
     };
@@ -60,10 +56,8 @@ const Login: React.FC = () => {
 
     setLoading(true);
     try {
-
       const response = await axios.post("http://localhost:8081/users/generate-otp", {
         memberId: formData.memberId,
-        dateOfBirth: formData.dateOfBirth,
         contactNo: formData.contactNo,
       });
 
@@ -89,7 +83,6 @@ const Login: React.FC = () => {
 
     setLoading(true);
     try {
-
       const response = await axios.post("http://localhost:8081/users/validate-otp", {
         memberId: formData.memberId,
         otp: formData.otp,
@@ -119,7 +112,7 @@ const Login: React.FC = () => {
             onClick={() => navigate("/")}
           />
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Member Validation</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Login</h1>
             <p className="mt-1 text-gray-600">Please verify your identity to continue</p>
           </div>
         </div>
@@ -132,17 +125,6 @@ const Login: React.FC = () => {
             value={formData.memberId}
             onChange={(e) => setFormData({ ...formData, memberId: e.target.value })}
             error={errors.memberId}
-            required
-            disabled={showOTP}
-          />
-
-          <Input
-            icon={Calendar}
-            label="Date of Birth"
-            type="date"
-            value={formData.dateOfBirth}
-            onChange={(e) => setFormData({ ...formData, dateOfBirth: e.target.value })}
-            error={errors.dateOfBirth}
             required
             disabled={showOTP}
           />

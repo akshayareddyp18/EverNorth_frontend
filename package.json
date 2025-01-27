@@ -15,8 +15,8 @@
         "member-profile-setup": "file:",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
-        "react-hot-toast": "^2.4.1",
-        "react-router-dom": "^6.22.3",
+        "react-hot-toast": "^2.5.1",
+        "react-router-dom": "^6.28.2",
         "zod": "^3.23.8"
     },
     "devDependencies": {

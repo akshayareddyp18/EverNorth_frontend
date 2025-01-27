@@ -4,10 +4,15 @@ export interface ValidationFormData {
     mobileNumber: string;
   }
   
+  export interface OTPValidationStatus {
+    isValid: boolean | null;
+    message: string;
+  }
   export interface ContactInfo {
     mobileNumber: string;
     email: string;
     preferredContact: 'mobile' | 'email' | 'text';
+    countryCode?: string;
   }
   
   export interface PaymentMethod {
@@ -18,6 +23,10 @@ export interface ValidationFormData {
     cardType?: string;
     expiryDate?: string;
     upiId?: string;
+    createdAt: string;
+    bankName?: string;
+    accountNumber?: string;
+    ifscCode?: string;
   }
   
   export interface Address {

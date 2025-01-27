@@ -126,6 +126,7 @@ export default function PaymentMethods({ methods, onChange }: Props) {
                 <option value="credit">Credit Card</option>
                 <option value="debit">Debit Card</option>
                 <option value="upi">UPI</option>
+                <option value="Bank Transfer">Bank Transfer</option>
               </select>
             </div>
 
@@ -143,6 +144,7 @@ export default function PaymentMethods({ methods, onChange }: Props) {
                       setNewMethod({ ...newMethod, cardNumber: e.target.value.replace(/\D/g, '') })
                     }
                     className={`w-full rounded-lg border ${errors.cardNumber ? 'border-red-500' : 'border-gray-300'} shadow-sm py-3 px-4 focus:ring-2 focus:ring-blue-500`}
+
                     placeholder="Enter 16-digit card number"
                     disabled={!isEditable}
                   />
@@ -158,6 +160,7 @@ export default function PaymentMethods({ methods, onChange }: Props) {
                     value={newMethod.nameOnCard || ''}
                     onChange={(e) => setNewMethod({ ...newMethod, nameOnCard: e.target.value })}
                     className={`w-full rounded-lg border ${errors.nameOnCard ? 'border-red-500' : 'border-gray-300'} shadow-sm py-3 px-4 focus:ring-2 focus:ring-blue-500`}
+
                     placeholder="Enter name as shown on card"
                     disabled={!isEditable}
                   />
@@ -178,6 +181,7 @@ export default function PaymentMethods({ methods, onChange }: Props) {
                         setNewMethod({ ...newMethod, expiryDate: value })
                       }}
                       className={`w-full rounded-lg border ${errors.expiryDate ? 'border-red-500' : 'border-gray-300'} shadow-sm py-3 px-4 focus:ring-2 focus:ring-blue-500`}
+
                       placeholder="MM/YY"
                       maxLength={5}
                       disabled={!isEditable}
@@ -209,6 +213,7 @@ export default function PaymentMethods({ methods, onChange }: Props) {
                     value={newMethod.upiId || ''}
                     onChange={(e) => setNewMethod({ ...newMethod, upiId: e.target.value })}
                     className={`w-full rounded-lg border ${errors.upiId ? 'border-red-500' : 'border-gray-300'} shadow-sm py-3 px-4 focus:ring-2 focus:ring-blue-500`}
+
                     placeholder="Enter UPI ID"
                     disabled={!isEditable}
                   />

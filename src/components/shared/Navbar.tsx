@@ -10,11 +10,13 @@ const Navbar: React.FC = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    logout();
-    navigate('/');
+    if (window.confirm("Are you sure you want to logout?")) {
+      logout();
+      navigate('/');
+    }
   };
 
-  if (location.pathname === '/') return null;
+  if (location.pathname === '/' || location.pathname === '/login') return null;
 
   return (
     <nav className="bg-white shadow-sm">
@@ -24,13 +26,8 @@ const Navbar: React.FC = () => {
             <Home className="w-5 h-5" />
             Home
           </Link>
-
           {isAuthenticated && (
-            <Button
-              variant="secondary"
-              icon={LogOut}
-              onClick={handleLogout}
-            >
+            <Button variant="secondary" icon={LogOut} onClick={handleLogout}>
               Logout
             </Button>
           )}

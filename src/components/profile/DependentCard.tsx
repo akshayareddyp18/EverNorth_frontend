@@ -98,7 +98,7 @@ export default function DependentSection({ dependents, onChange }: Props) {
     setNewDependent({ ...dependent });
     setShowForm(true);
   };
-  
+
   const handleCancel = () => {
     setEditingDependent(null);
     setNewDependent({});
@@ -236,17 +236,16 @@ export default function DependentSection({ dependents, onChange }: Props) {
             </div>
           </div>
 
-          <div className="flex justify-end space-x-3 mt-6">
+          <div className="flex justify-end space-x-4 mt-6">
             <button
               onClick={handleCancel}
-              className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+              className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg"
             >
               Cancel
             </button>
-
             <button
               onClick={editingDependent ? handleSaveEdit : handleAdd}
-              className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg"
             >
               {editingDependent ? 'Save Changes' : 'Add Dependent'}
             </button>
@@ -254,65 +253,58 @@ export default function DependentSection({ dependents, onChange }: Props) {
         </div>
       )}
 
-  
-        {!showForm && dependents.length > 0 && (
-          <div>
-            {dependents.map((dependent) => (
-              <div key={dependent.id} className="mb-6 p-4 bg-white rounded-lg shadow-sm">
-                <div className="flex justify-between items-center">
-                  <div>
-                    <p className="font-semibold">{dependent.name}</p>
-                    <p className="text-sm text-gray-500">{dependent.relation}</p>
-                    <p className="text-sm text-gray-500">Date of Birth: {dependent.dateOfBirth}</p>
-                    <p className="text-sm text-gray-500">Phone: {dependent.mobileNumber}</p>
-                    <p className="text-sm text-gray-500">Email: {dependent.email}</p>
-                  </div>
-
-                  <div className="flex items-center space-x-4">
-                    <button
-                      onClick={() => handleEdit(dependent)}
-                      className="text-blue-500 hover:text-blue-600 focus:outline-none"
-                    >
-                      <Edit className="h-5 w-5" />
-                    </button>
-                    <button
-                      onClick={() => handleDelete(dependent.id)}
-                      className="text-red-500 hover:text-red-600 focus:outline-none"
-                    >
-                      <Trash2 className="h-5 w-5" />
-                    </button>
-                    <button
-                      onClick={() => toggleEmergencyContact(dependent.id)}
-                      className={`${
-                        dependent.isEmergencyContact ? 'text-red-500' : 'text-gray-500'
-                      } hover:text-red-600 focus:outline-none`}
-                    >
-                      <AlertCircle className="h-5 w-5" />
-                    </button>
-                  </div>
-                </div>
+      {/* List of Dependents */}
+      <div>
+        {dependents.map((dependent) => (
+          <div key={dependent.id} className="mb-6 p-4 bg-white rounded-lg shadow-sm">
+            <div className="flex justify-between items-center">
+              <div>
+                <p className="font-semibold">{dependent.name}</p>
+                <p className="text-sm text-gray-500">{dependent.relation}</p>
+                <p className="text-sm text-gray-500">Date of Birth: {dependent.dateOfBirth}</p>
+                <p className="text-sm text-gray-500">Phone: {dependent.mobileNumber}</p>
+                <p className="text-sm text-gray-500">Email: {dependent.email}</p>
               </div>
-            ))}
-          </div>
-        )}
 
-        {/* Emergency SOS Button */}
-        {!showForm && dependents.length > 0 && (
-          <div className="mt-8 text-center">
-            <button
-              onClick={handleEmergencySOS}
-              className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 shadow-lg"
-            >
-              <AlertCircle className="h-5 w-5 mr-2" />
-              Emergency SOS
-            </button>
-            <p className="mt-2 text-sm text-gray-500">
-              Contact your emergency contact for help.
-            </p>
-          </div>
-        )}
+              <div className="flex items-center space-x-4">
+                {/* Checkbox for selecting emergency contact */}
+                <input
+                  type="checkbox"
+                  checked={dependent.isEmergencyContact}
+                  onChange={() => toggleEmergencyContact(dependent.id)}
+                  className="h-5 w-5"
+                />
+                <label className="text-gray-700">Emergency Contact</label>
+              </div>
 
-    </div>  
-      
+              <div className="flex items-center space-x-4">
+                <button
+                  onClick={() => handleEdit(dependent)}
+                  className="text-blue-500 hover:text-blue-600 focus:outline-none"
+                >
+                  <Edit className="h-5 w-5" />
+                </button>
+                <button
+                  onClick={() => handleDelete(dependent.id)}
+                  className="text-red-500 hover:text-red-600 focus:outline-none"
+                >
+                  <Trash2 className="h-5 w-5" />
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Emergency SOS Button */}
+      <div className="mt-8">
+        <button
+          onClick={handleEmergencySOS}
+          className="px-6 py-3 bg-red-600 text-white rounded-lg"
+        >
+          Send Emergency SOS
+        </button>
+      </div>
+    </div>
   );
 }

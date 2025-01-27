@@ -1,15 +1,12 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { UserCircle2 } from 'lucide-react';
 import evernorth from "../assets/evernorth.jpg"; 
 
-const mockUser = {
-  name: "Sarah Johnson",
-  memberId: "MEM123456",
-};
-
 function Welcome() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const userData = location.state; // Retrieve the passed user data
 
   const heroImageStyle: React.CSSProperties = {
     backgroundImage:`url(${evernorth})`,
@@ -36,15 +33,15 @@ function Welcome() {
             </div>
             <div className="text-center mt-6">
               <h1 className="text-4xl font-bold text-gray-800 mb-2">
-                Welcome ,  {mockUser.name}!
+                Welcome, {userData ? userData.name : 'User'}!
               </h1>
               <p className="text-gray-600 mb-8">
-              A user-friendly platform to manage your health, track issues, and make payments
+                A user-friendly platform to manage your health, track issues, and make payments
               </p>
               <div className="bg-gradient-to-r from-teal-500 to-blue-600 p-6 rounded-xl inline-block">
                 <p className="text-teal-100 text-sm">MEMBER ID</p>
                 <p className="text-white text-2xl font-mono tracking-wider">
-                  {mockUser.memberId}
+                  {userData ? userData.memberId : 'N/A'}
                 </p>
               </div>
               <div className="mt-12 grid gap-6 md:grid-cols-3">

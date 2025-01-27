@@ -11,6 +11,7 @@ export default function AddressSection({ addresses, onChange }: Props) {
   const [showForm, setShowForm] = useState(false);
   const [newAddress, setNewAddress] = useState<Partial<Address>>({});
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [selectedAddressId, setSelectedAddressId] = useState<string | null>(null);
   const [editingAddressId, setEditingAddressId] = useState<string | null>(null);
 
   const validateAddress = () => {
@@ -79,28 +80,31 @@ export default function AddressSection({ addresses, onChange }: Props) {
     }
   };
 
+  const handleSelectAddress = (id: string) => {
+    setSelectedAddressId(id);
+  };
+
   return (
     <div className="p-8">
-    <div className="flex justify-between items-center mb-6">
-      <h2 className="text-2xl font-semibold text-gray-900">Delivery Addresses</h2>
-      {!showForm && addresses.length < 3 && (
-        <button
-          onClick={() => setShowForm(true)}
-          className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700"
-        >
-          <Plus className="h-5 w-5 mr-2" />
-          Add Address
-        </button>
-      )}
-    </div>
-
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-semibold text-gray-900">Delivery Addresses</h2>
+        {!showForm && addresses.length < 3 && (
+          <button
+            onClick={() => setShowForm(true)}
+            className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700"
+          >
+            <Plus className="h-5 w-5 mr-2" />
+            Add Address
+          </button>
+        )}
+      </div>
 
       {showForm && (
         <div className="mb-6 p-6 border rounded-lg bg-gray-50">
           <div className="space-y-6">
             <div className="space-y-2">
               <label className="block text-sm font-medium text-gray-700">
-                Address Label
+                Address Type (e.g., Home, Office, etc.)
               </label>
               <input
                 type="text"
@@ -113,9 +117,7 @@ export default function AddressSection({ addresses, onChange }: Props) {
                 } shadow-sm py-3 px-4 focus:ring-2 focus:ring-blue-500`}
                 placeholder="e.g., Home, Office, etc."
               />
-              {errors.label && (
-                <p className="text-red-500 text-sm">{errors.label}</p>
-              )}
+              {errors.label && <p className="text-red-500 text-sm">{errors.label}</p>}
             </div>
 
             <div className="space-y-2">
@@ -133,9 +135,7 @@ export default function AddressSection({ addresses, onChange }: Props) {
                 } shadow-sm py-3 px-4 focus:ring-2 focus:ring-blue-500`}
                 placeholder="Street address"
               />
-              {errors.line1 && (
-                <p className="text-red-500 text-sm">{errors.line1}</p>
-              )}
+              {errors.line1 && <p className="text-red-500 text-sm">{errors.line1}</p>}
             </div>
 
             <div className="space-y-2">
@@ -168,9 +168,7 @@ export default function AddressSection({ addresses, onChange }: Props) {
                     errors.city ? 'border-red-500' : 'border-gray-300'
                   } shadow-sm py-3 px-4 focus:ring-2 focus:ring-blue-500`}
                 />
-                {errors.city && (
-                  <p className="text-red-500 text-sm">{errors.city}</p>
-                )}
+                {errors.city && <p className="text-red-500 text-sm">{errors.city}</p>}
               </div>
               <div className="space-y-2">
                 <label className="block text-sm font-medium text-gray-700">
@@ -186,9 +184,7 @@ export default function AddressSection({ addresses, onChange }: Props) {
                     errors.state ? 'border-red-500' : 'border-gray-300'
                   } shadow-sm py-3 px-4 focus:ring-2 focus:ring-blue-500`}
                 />
-                {errors.state && (
-                  <p className="text-red-500 text-sm">{errors.state}</p>
-                )}
+                {errors.state && <p className="text-red-500 text-sm">{errors.state}</p>}
               </div>
             </div>
 
@@ -208,22 +204,7 @@ export default function AddressSection({ addresses, onChange }: Props) {
                   } shadow-sm py-3 px-4 focus:ring-2 focus:ring-blue-500`}
                   maxLength={6}
                 />
-                {errors.zipCode && (
-                  <p className="text-red-500 text-sm">{errors.zipCode}</p>
-                )}
-              </div>
-              <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700">
-                  Landmark (Optional)
-                </label>
-                <input
-                  type="text"
-                  value={newAddress.landmark || ''}
-                  onChange={(e) =>
-                    setNewAddress({ ...newAddress, landmark: e.target.value })
-                  }
-                  className="w-full rounded-lg border border-gray-300 shadow-sm py-3 px-4 focus:ring-2 focus:ring-blue-500"
-                />
+                {errors.zipCode && <p className="text-red-500 text-sm">{errors.zipCode}</p>}
               </div>
             </div>
 
@@ -268,7 +249,14 @@ export default function AddressSection({ addresses, onChange }: Props) {
                     )}
                   </div>
                 </div>
+
                 <div className="flex space-x-3">
+                  <input
+                    type="checkbox"
+                    checked={selectedAddressId === address.id}
+                    onChange={() => handleSelectAddress(address.id)}
+                    className="h-5 w-5 text-blue-600"
+                  />
                   <button
                     onClick={() => handleEdit(address.id)}
                     className="text-blue-500 hover:text-blue-700"

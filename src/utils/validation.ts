@@ -25,8 +25,8 @@ export const validationSchemas = {
       const dob = new Date(date);
       const today = new Date();
       const age = today.getFullYear() - dob.getFullYear();
-      return age >= 18 && age <= 100;
-    }, 'Age must be between 18 and 100 years'),
+     return age >= 18 && age <= 100;
+   }, 'Age must be between 18 and 100 years'),
   }),
 
   contactInfo: z.object({
@@ -86,7 +86,7 @@ export const validateProfile = (profile: UserProfile): ValidationErrors => {
   try {
     validationSchemas.personalInfo.parse({
       fullName: profile.fullName,
-      dateOfBirth: profile.dateOfBirth,
+      //dateOfBirth: profile.dateOfBirth,
     });
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -156,20 +156,20 @@ export const validateMemberId = (memberId: string): string | null => {
   return null;
 };
 
-export const validateDOB = (dob: string): string | null => {
-  if (!dob) return 'Date of Birth is required';
+//export const validateDOB = (dob: string): string | null => {
+//  if (!dob) return 'Date of Birth is required';
   
-  const date = new Date(dob);
-  const today = new Date();
+//  const date = new Date(dob);
+//  const today = new Date();
   
-  if (date > today) return 'Date of Birth cannot be in the future';
+//  if (date > today) return 'Date of Birth cannot be in the future';
   
-  const minDate = new Date();
-  minDate.setFullYear(today.getFullYear() - 120);
-  if (date < minDate) return 'Please enter a valid Date of Birth';
+//  const minDate = new Date();
+//  minDate.setFullYear(today.getFullYear() - 120);
+//  if (date < minDate) return 'Please enter a valid Date of Birth';
   
-  return null;
-};
+//  return null;
+//};
 
 export const validateMobile = (mobile: string): string | null => {
   if (!mobile) return 'Mobile number is required';
