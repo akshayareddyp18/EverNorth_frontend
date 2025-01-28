@@ -52,66 +52,67 @@ const commonConditions = [
 "Norovirus", "Rotavirus", "Common Cold", "COVID-19", "SARS-CoV-2", "Monkeypox", "Rhinovirus", "Enterovirus",
 "RSV", "Hand, Foot and Mouth Disease", "Immunodeficiency Diseases", "Primary Immunodeficiency", "Acquired Immunodeficiency Syndrome"
   ];
-  
-  const commonAllergies = [
-    "Peanuts", "Tree Nuts", "Milk", "Eggs", "Soy", "Wheat", "Fish", "Shellfish", "Dust", "Pollen", "Latex", "Insect Stings", "Penicillin", 
-    "Aspirin", "Ibuprofen", "Sulfa Drugs", "Eggplant", "Tomatoes", "Citrus Fruits", "Chocolate", "Gluten", "Sesame Seeds", "Dairy Products",
-    "Perfumes/Cosmetics", "Animal Dander (Cats, Dogs)", "Mold", "Cigarette Smoke", "Pollens (Grass, Ragweed)", "Sun Exposure (Sunburns)",
-    "Food Additives (MSG, Sulfites)", "Nickel (Metal Allergies)", "Medicines (Aspirin, Ibuprofen)", "Latex Gloves", "Wool", "Pollen from Trees",
-    "Pollen from Grasses", "Pollen from Weeds", "Ragweed Pollen", "Birch Tree Pollen", "Cedar Tree Pollen", "Dust Mites", "Cockroach Allergy", 
-    "Animal Saliva (Dogs, Cats)", "Bee Stings", "Wasp Stings", "Fire Ant Stings", "Flea Bites", "Mosquito Bites", "Cockroach Droppings", 
-    "Poison Ivy", "Poison Oak", "Poison Sumac", "Synthetic Fabrics (e.g., polyester)", "Wool Clothing", "Metal Jewelry (e.g., nickel)", 
-    "Gold Allergy", "Silver Allergy", "Copper Allergy", "Formaldehyde", "Fragrance in Cosmetics", "Chlorine (in swimming pools)",
-    "Sunlight (photosensitivity)", "Wind (allergy-induced)", "Mold Spores", "Tree Bark", "Pet Hair", "Feather Pillows", "Dust from Carpets",
-    "Laundry Detergents", "Fabric Softeners", "Hair Dyes", "Food Coloring (e.g., Red 40)", "Artificial Sweeteners", "Salt", 
-    "MSG (Monosodium Glutamate)", "Sulfites (in wine and dried fruits)", "Benzoates (preservatives)", "Nitrates in Processed Meats",
-    "Aspartame", "Artificial Colors (Yellow 5, Red 40)", "Caffeine", "Histamine (found in aged foods)", "Tannins (found in wine)", 
-    "Gelatin (found in marshmallows, gummy candies)", "Latex Balloons", "Rubber Bands", "Band-Aids (adhesives)", "Adhesive Tapes",
-    "Mold in Bathroom", "Car Exhaust Fumes", "Industrial Fumes", "Air Pollution", "Soot", "Gasoline Fumes", "Chemical Cleaning Products", 
-    "Floor Wax", "Carpet Cleaner", "Paint Fumes", "Solvents (e.g., acetone)", "Pesticides", "Herbicides", "Anti-freeze", "Nail Polish",
-    "Nail Polish Remover (acetone)", "Shaving Cream", "Deodorants", "Hair Spray", "Bug Spray", "Insect Repellent", "Antifungal Cream",
-    "Alcohol in Skin Products", "Toothpaste Ingredients", "Detergents (laundry and dish)", "Disinfectants", "Perfumes", "Aftershave",
-    "Sunblock", "Sunscreen Ingredients (oxybenzone)", "Skin Care Products", "Acne Treatments", "Hair Removal Creams", "Facial Scrubs", 
-    "Body Lotions", "Soap Fragrances", "Flavored Lip Balms", "Gum", "Tooth Whitening Products", "Lipstick", "Lip Gloss", 
-    "Foundation Makeup", "Concealers", "Mascara", "Eyeliner", "Eye Shadow", "Blush", "Hair Dye", "Henna", "Metal Fillings in Teeth", 
-    "Tattoos (dye allergies)", "Eyewear Materials (e.g., plastic, rubber)", "Contact Lenses", "Cotton", "Linen", "Silk", "Hemp",
-    "Spandex", "Nylon", "Acrylic Fabrics", "Polyester", "Rayon", "PVC (Plastic)", "Leather", "Animal Fur (e.g., mink, rabbit)",
-    "Rubber Flooring", "Asphalt", "Tar", "Charcoal (grilled food)", "Wood Smoke", "Exhaust from Boilers", "Coal Dust", "Sand",
-    "Concrete Dust", "Ammonia", "Chlorine Bleach", "Acetone", "Benzene", "Toluene", "Carbon Monoxide", "Ammonium Hydroxide", 
-    "Silica Dust", "Formaldehyde (building materials)", "Styrene", "Nitrogen Dioxide", "Sulfur Dioxide", "Pesticide Residue",
-    "Herbicide Residue", "Farm Animal Dander", "Bird Droppings", "Barn Dust", "Plant Pollens", "Tree Sap", "Straw", "Grass Clippings",
-    "Hay", "Wood Shavings", "Fungal Spores", "Tree Sap", "Moss", "Cedar Wood Dust", "Paper Dust", "Magazine Ink", "Newspaper Ink",
-    "Leather Goods", "Plant Oils (e.g., lavender, eucalyptus)", "Essential Oils (e.g., tea tree, peppermint)", 
-    "Facial Masks (clay, mud)", "Hair Removal Wax", "Bath Salts", "Body Scrubs", "Hand Sanitizers", "Vitamin C (topical)",
-    "Antioxidants (in skincare)", "Soy Protein", "Pea Protein", "Tofu", "Tempeh", "Vegan Meat Substitutes", "Caviar", "Truffles",
-    "Seaweed", "Sea Cucumber", "Oysters", "Mussels", "Squid", "Octopus", "Eel", "Anchovies", "Sardines", "Tuna", "Salmon", "Cod",
-    "Halibut", "Haddock", "Mackerel", "Tilapia", "Shellfish (Lobster, Crab)", "Prawns", "Shrimp", "Scallops", "Clams", "Abalone", 
-    "Laver (seaweed)", "Kelp", "Miso", "Soy Sauce", "Tofu Products", "Yogurt", "Cheese", "Ice Cream", "Butter", "Milk Chocolate",
-    "Dark Chocolate", "White Chocolate", "Chocolate Ice Cream", "Chocolate Bars", "Marshmallows", "Gummy Candies", "Fruit Juices", 
-    "Canned Vegetables", "Canned Meat", "Canned Fish", "Processed Meats", "Red Meat", "Poultry", "Ham", "Bacon", "Sausages", 
-    "Hot Dogs", "Salami", "Pepperoni", "Pepper", "Paprika", "Curry", "Chili Peppers", "Mustard", "Ketchup", "Mayonnaise", 
-    "Soy Sauce", "Vinegar", "Olive Oil", "Coconut Oil", "Palm Oil", "Sesame Oil", "Canola Oil", "Vegetable Oils", "Animal Fats",
-     "Fish Oil", "Cod Liver Oil", "Flaxseed Oil", "Hemp Oil", "Sunflower Oil", "Corn Oil", "Cottonseed Oil", "Ghee", "Lard", "Tallow",
-    "Sugar", "Refined Sugar", "Brown Sugar", "Honey", "Maple Syrup", "Agave", "Molasses", "Stevia", "Xylitol", "Aspartame", "Saccharin",
-    "Sucralose", "High Fructose Corn Syrup", "Fruit Juice Concentrates", "Artificial Sweeteners", "Soft Drinks", "Energy Drinks", "Alcohol", 
-    "Beer", "Wine", "Spirits", "Whiskey", "Vodka", "Rum", "Tequila", "Cider", "Lemonade", "Iced Tea", "Hot Tea", "Coffee", 
-    "Milk Alternatives (e.g., almond, oat, coconut milk)", "Coffee Creamers", "Non-Dairy Yogurt", "Non-Dairy Cheese", "Non-Dairy Ice Cream", 
-    "Almonds", "Walnuts", "Cashews", "Pecans", "Hazelnuts", "Pistachios", "Macadamia Nuts", "Brazil Nuts", "Pine Nuts", "Chestnuts", "Filberts", 
-    "Coconut", "Cacao", "Carob", "Chia Seeds", "Flax Seeds", "Sunflower Seeds", "Pumpkin Seeds", "Sesame Seeds", "Hemp Seeds", "Poppy Seeds", 
-    "Quinoa", "Rice", "Barley", "Rye", "Buckwheat", "Oats", "Amaranth", "Millet", "Sorghum", "Spelt", "Teff", "Bulgur", "Couscous", "Tapioca", 
-    "Polenta", "Sweet Potatoes", "Yams", "Carrots", "Beets", "Cucumbers", "Zucchini", "Bell Peppers", "Lettuce", "Spinach", "Kale", "Chard", 
-    "Arugula", "Broccoli", "Cauliflower", "Brussels Sprouts", "Cabbage", "Celery", "Tomatoes", "Avocados", "Cucumbers", "Pumpkins", "Squash", 
-    "Radishes", "Green Beans", "Asparagus", "Peas", "Mushrooms", "Leeks", "Onions", "Garlic", "Shallots", "Chives", "Ginger", "Turmeric", "Basil", 
-    "Oregano", "Thyme", "Parsley", "Sage", "Rosemary", "Mint", "Dill", "Cilantro", "Tarragon", "Chili Peppers", "Curry Leaves", "Lavender", "Curry", 
-    "Cumin", "Fennel Seeds", "Cardamom", "Cinnamon", "Nutmeg", "Cloves", "Black Pepper", "Saffron", "Allspice", "Vanilla", "Chocolate Chips", 
-    "Caramel", "Marzipan", "Candy Corn", "Fruit Snacks", "Fruit Leather", "Gummy Bears", "Jelly Beans", "Lollipops", "Hard Candy", "Taffy", 
-    "Licorice", "Cotton Candy", "Candy Canes", "Pecan Pie", "Apple Pie", "Lemon Meringue Pie", "Pumpkin Pie", "Cheesecake", "Chocolate Cake", 
-    "Cupcakes", "Brownies", "Cookies", "Ice Cream Cake", "Tarts", "Pastries", "Doughnuts", "Muffins", "Croissants", "Bagels", "Buns", "Biscuits", 
-    "Scones", "Waffles", "Pancakes", "Toast", "Croissants", "Cinnamon Rolls", "Granola Bars", "Breakfast Cereals", "Instant Oatmeal", "Energy Bars", 
-    "Protein Bars", "Tapioca Pudding", "Chia Pudding", "Rice Pudding", "Jell-O", "Custard", "Pudding", "Gelatin Desserts", "Fruit Cups", "Sherbet", 
-    "Frozen Yogurt", "Non-Dairy Frozen Dessert", "Smoothies", "Milkshakes", "Fruit Juices", "Coconut Water", "Sports Drinks", "Vitamin Water", 
-    "Coconut Milk", "Soy Milk", "Almond Milk", "Oat Milk", "Rice Milk"
-  ];
+
+const commonAllergies = [
+  "Peanuts", "Tree Nuts", "Milk", "Eggs", "Soy", "Wheat", "Fish", "Shellfish", "Dust", "Pollen", "Latex", "Insect Stings", "Penicillin", 
+  "Aspirin", "Ibuprofen", "Sulfa Drugs", "Eggplant", "Tomatoes", "Citrus Fruits", "Chocolate", "Gluten", "Sesame Seeds", "Dairy Products",
+  "Perfumes/Cosmetics", "Animal Dander (Cats, Dogs)", "Mold", "Cigarette Smoke", "Pollens (Grass, Ragweed)", "Sun Exposure (Sunburns)",
+  "Food Additives (MSG, Sulfites)", "Nickel (Metal Allergies)", "Medicines (Aspirin, Ibuprofen)", "Latex Gloves", "Wool", "Pollen from Trees",
+  "Pollen from Grasses", "Pollen from Weeds", "Ragweed Pollen", "Birch Tree Pollen", "Cedar Tree Pollen", "Dust Mites", "Cockroach Allergy", 
+  "Animal Saliva (Dogs, Cats)", "Bee Stings", "Wasp Stings", "Fire Ant Stings", "Flea Bites", "Mosquito Bites", "Cockroach Droppings", 
+  "Poison Ivy", "Poison Oak", "Poison Sumac", "Synthetic Fabrics (e.g., polyester)", "Wool Clothing", "Metal Jewelry (e.g., nickel)", 
+  "Gold Allergy", "Silver Allergy", "Copper Allergy", "Formaldehyde", "Fragrance in Cosmetics", "Chlorine (in swimming pools)",
+  "Sunlight (photosensitivity)", "Wind (allergy-induced)", "Mold Spores", "Tree Bark", "Pet Hair", "Feather Pillows", "Dust from Carpets",
+  "Laundry Detergents", "Fabric Softeners", "Hair Dyes", "Food Coloring (e.g., Red 40)", "Artificial Sweeteners", "Salt", 
+  "MSG (Monosodium Glutamate)", "Sulfites (in wine and dried fruits)", "Benzoates (preservatives)", "Nitrates in Processed Meats",
+  "Aspartame", "Artificial Colors (Yellow 5, Red 40)", "Caffeine", "Histamine (found in aged foods)", "Tannins (found in wine)", 
+  "Gelatin (found in marshmallows, gummy candies)", "Latex Balloons", "Rubber Bands", "Band-Aids (adhesives)", "Adhesive Tapes",
+  "Mold in Bathroom", "Car Exhaust Fumes", "Industrial Fumes", "Air Pollution", "Soot", "Gasoline Fumes", "Chemical Cleaning Products", 
+  "Floor Wax", "Carpet Cleaner", "Paint Fumes", "Solvents (e.g., acetone)", "Pesticides", "Herbicides", "Anti-freeze", "Nail Polish",
+  "Nail Polish Remover (acetone)", "Shaving Cream", "Deodorants", "Hair Spray", "Bug Spray", "Insect Repellent", "Antifungal Cream",
+  "Alcohol in Skin Products", "Toothpaste Ingredients", "Detergents (laundry and dish)", "Disinfectants", "Perfumes", "Aftershave",
+  "Sunblock", "Sunscreen Ingredients (oxybenzone)", "Skin Care Products", "Acne Treatments", "Hair Removal Creams", "Facial Scrubs", 
+  "Body Lotions", "Soap Fragrances", "Flavored Lip Balms", "Gum", "Tooth Whitening Products", "Lipstick", "Lip Gloss", 
+  "Foundation Makeup", "Concealers", "Mascara", "Eyeliner", "Eye Shadow", "Blush", "Hair Dye", "Henna", "Metal Fillings in Teeth", 
+  "Tattoos (dye allergies)", "Eyewear Materials (e.g., plastic, rubber)", "Contact Lenses", "Cotton", "Linen", "Silk", "Hemp",
+  "Spandex", "Nylon", "Acrylic Fabrics", "Polyester", "Rayon", "PVC (Plastic)", "Leather", "Animal Fur (e.g., mink, rabbit)",
+  "Rubber Flooring", "Asphalt", "Tar", "Charcoal (grilled food)", "Wood Smoke", "Exhaust from Boilers", "Coal Dust", "Sand",
+  "Concrete Dust", "Ammonia", "Chlorine Bleach", "Acetone", "Benzene", "Toluene", "Carbon Monoxide", "Ammonium Hydroxide", 
+  "Silica Dust", "Formaldehyde (building materials)", "Styrene", "Nitrogen Dioxide", "Sulfur Dioxide", "Pesticide Residue",
+  "Herbicide Residue", "Farm Animal Dander", "Bird Droppings", "Barn Dust", "Plant Pollens", "Tree Sap", "Straw", "Grass Clippings",
+  "Hay", "Wood Shavings", "Fungal Spores", "Tree Sap", "Moss", "Cedar Wood Dust", "Paper Dust", "Magazine Ink", "Newspaper Ink",
+  "Leather Goods", "Plant Oils (e.g., lavender, eucalyptus)", "Essential Oils (e.g., tea tree, peppermint)", 
+  "Facial Masks (clay, mud)", "Hair Removal Wax", "Bath Salts", "Body Scrubs", "Hand Sanitizers", "Vitamin C (topical)",
+  "Antioxidants (in skincare)", "Soy Protein", "Pea Protein", "Tofu", "Tempeh", "Vegan Meat Substitutes", "Caviar", "Truffles",
+  "Seaweed", "Sea Cucumber", "Oysters", "Mussels", "Squid", "Octopus", "Eel", "Anchovies", "Sardines", "Tuna", "Salmon", "Cod",
+  "Halibut", "Haddock", "Mackerel", "Tilapia", "Shellfish (Lobster, Crab)", "Prawns", "Shrimp", "Scallops", "Clams", "Abalone", 
+  "Laver (seaweed)", "Kelp", "Miso", "Soy Sauce", "Tofu Products", "Yogurt", "Cheese", "Ice Cream", "Butter", "Milk Chocolate",
+  "Dark Chocolate", "White Chocolate", "Chocolate Ice Cream", "Chocolate Bars", "Marshmallows", "Gummy Candies", "Fruit Juices", 
+  "Canned Vegetables", "Canned Meat", "Canned Fish", "Processed Meats", "Red Meat", "Poultry", "Ham", "Bacon", "Sausages", 
+  "Hot Dogs", "Salami", "Pepperoni", "Pepper", "Paprika", "Curry", "Chili Peppers", "Mustard", "Ketchup", "Mayonnaise", 
+  "Soy Sauce", "Vinegar", "Olive Oil", "Coconut Oil", "Palm Oil", "Sesame Oil", "Canola Oil", "Vegetable Oils", "Animal Fats",
+   "Fish Oil", "Cod Liver Oil", "Flaxseed Oil", "Hemp Oil", "Sunflower Oil", "Corn Oil", "Cottonseed Oil", "Ghee", "Lard", "Tallow",
+  "Sugar", "Refined Sugar", "Brown Sugar", "Honey", "Maple Syrup", "Agave", "Molasses", "Stevia", "Xylitol", "Aspartame", "Saccharin",
+  "Sucralose", "High Fructose Corn Syrup", "Fruit Juice Concentrates", "Artificial Sweeteners", "Soft Drinks", "Energy Drinks", "Alcohol", 
+  "Beer", "Wine", "Spirits", "Whiskey", "Vodka", "Rum", "Tequila", "Cider", "Lemonade", "Iced Tea", "Hot Tea", "Coffee", 
+  "Milk Alternatives (e.g., almond, oat, coconut milk)", "Coffee Creamers", "Non-Dairy Yogurt", "Non-Dairy Cheese", "Non-Dairy Ice Cream", 
+  "Almonds", "Walnuts", "Cashews", "Pecans", "Hazelnuts", "Pistachios", "Macadamia Nuts", "Brazil Nuts", "Pine Nuts", "Chestnuts", "Filberts", 
+  "Coconut", "Cacao", "Carob", "Chia Seeds", "Flax Seeds", "Sunflower Seeds", "Pumpkin Seeds", "Sesame Seeds", "Hemp Seeds", "Poppy Seeds", 
+  "Quinoa", "Rice", "Barley", "Rye", "Buckwheat", "Oats", "Amaranth", "Millet", "Sorghum", "Spelt", "Teff", "Bulgur", "Couscous", "Tapioca", 
+  "Polenta", "Sweet Potatoes", "Yams", "Carrots", "Beets", "Cucumbers", "Zucchini", "Bell Peppers", "Lettuce", "Spinach", "Kale", "Chard", 
+  "Arugula", "Broccoli", "Cauliflower", "Brussels Sprouts", "Cabbage", "Celery", "Tomatoes", "Avocados", "Cucumbers", "Pumpkins", "Squash", 
+  "Radishes", "Green Beans", "Asparagus", "Peas", "Mushrooms", "Leeks", "Onions", "Garlic", "Shallots", "Chives", "Ginger", "Turmeric", "Basil", 
+  "Oregano", "Thyme", "Parsley", "Sage", "Rosemary", "Mint", "Dill", "Cilantro", "Tarragon", "Chili Peppers", "Curry Leaves", "Lavender", "Curry", 
+  "Cumin", "Fennel Seeds", "Cardamom", "Cinnamon", "Nutmeg", "Cloves", "Black Pepper", "Saffron", "Allspice", "Vanilla", "Chocolate Chips", 
+  "Caramel", "Marzipan", "Candy Corn", "Fruit Snacks", "Fruit Leather", "Gummy Bears", "Jelly Beans", "Lollipops", "Hard Candy", "Taffy", 
+  "Licorice", "Cotton Candy", "Candy Canes", "Pecan Pie", "Apple Pie", "Lemon Meringue Pie", "Pumpkin Pie", "Cheesecake", "Chocolate Cake", 
+  "Cupcakes", "Brownies", "Cookies", "Ice Cream Cake", "Tarts", "Pastries", "Doughnuts", "Muffins", "Croissants", "Bagels", "Buns", "Biscuits", 
+  "Scones", "Waffles", "Pancakes", "Toast", "Croissants", "Cinnamon Rolls", "Granola Bars", "Breakfast Cereals", "Instant Oatmeal", "Energy Bars", 
+  "Protein Bars", "Tapioca Pudding", "Chia Pudding", "Rice Pudding", "Jell-O", "Custard", "Pudding", "Gelatin Desserts", "Fruit Cups", "Sherbet", 
+  "Frozen Yogurt", "Non-Dairy Frozen Dessert", "Smoothies", "Milkshakes", "Fruit Juices", "Coconut Water", "Sports Drinks", "Vitamin Water", 
+  "Coconut Milk", "Soy Milk", "Almond Milk", "Oat Milk", "Rice Milk"
+];
+
 export default function HealthSection({ healthInfo, onChange }: Props) {
   const [newCondition, setNewCondition] = useState('');
   const [newAllergy, setNewAllergy] = useState('');
@@ -120,6 +121,13 @@ export default function HealthSection({ healthInfo, onChange }: Props) {
   const [showConditionDescription, setShowConditionDescription] = useState(false);
   const [selectedCondition, setSelectedCondition] = useState('');
   const [conditionDescription, setConditionDescription] = useState('');
+
+  // New state for confirmation modal
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [itemToRemove, setItemToRemove] = useState<{
+    type: 'condition' | 'allergy';
+    index: number;
+  } | null>(null);
 
   useEffect(() => {
     if (newCondition.length >= 3) {
@@ -176,21 +184,37 @@ export default function HealthSection({ healthInfo, onChange }: Props) {
     setNewAllergy('');
   };
 
+  // Show confirmation modal before removing condition or allergy
+  const handleConfirmRemove = () => {
+    if (itemToRemove) {
+      const { type, index } = itemToRemove;
+      if (type === 'condition') {
+        const condition = healthInfo.conditions[index];
+        const { [condition]: _, ...restDescriptions } = healthInfo.descriptions;
+        onChange({
+          ...healthInfo,
+          conditions: healthInfo.conditions.filter((_, i) => i !== index),
+          descriptions: restDescriptions
+        });
+      } else if (type === 'allergy') {
+        onChange({
+          ...healthInfo,
+          allergies: healthInfo.allergies.filter((_, i) => i !== index),
+        });
+      }
+      setShowConfirmation(false);
+      setItemToRemove(null);
+    }
+  };
+
   const handleRemoveCondition = (index: number) => {
-    const condition = healthInfo.conditions[index];
-    const { [condition]: _, ...restDescriptions } = healthInfo.descriptions;
-    onChange({
-      ...healthInfo,
-      conditions: healthInfo.conditions.filter((_, i) => i !== index),
-      descriptions: restDescriptions
-    });
+    setItemToRemove({ type: 'condition', index });
+    setShowConfirmation(true);
   };
 
   const handleRemoveAllergy = (index: number) => {
-    onChange({
-      ...healthInfo,
-      allergies: healthInfo.allergies.filter((_, i) => i !== index),
-    });
+    setItemToRemove({ type: 'allergy', index });
+    setShowConfirmation(true);
   };
 
   return (
@@ -362,6 +386,31 @@ export default function HealthSection({ healthInfo, onChange }: Props) {
                 className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
               >
                 {conditionDescription ? 'Add with Details' : 'Add Without Details'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Confirmation Modal */}
+      {showConfirmation && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full">
+            <h4 className="text-lg font-medium mb-4">
+              Are you sure you want to remove this item?
+            </h4>
+            <div className="flex justify-end space-x-3 mt-4">
+              <button
+                onClick={() => setShowConfirmation(false)}
+                className="px-4 py-2 text-gray-700 hover:text-gray-900"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleConfirmRemove}
+                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+              >
+                Confirm
               </button>
             </div>
           </div>

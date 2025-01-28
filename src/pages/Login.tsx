@@ -17,11 +17,13 @@ const Login: React.FC = () => {
   const { login } = useAuth();
   const [formData, setFormData] = useState({
     memberId: "",
+    //dateOfBirth: "",
     contactNo: "",
     otp: "",
   });
   const [errors, setErrors] = useState({
     memberId: "",
+    //dateOfBirth: "",
     contactNo: "",
     otp: "",
   });
@@ -42,6 +44,7 @@ const Login: React.FC = () => {
   const validateForm = (): boolean => {
     const newErrors = {
       memberId: validateMemberId(formData.memberId) || "",
+      //dateOfBirth: validateDOB(formData.dateOfBirth) || "",
       contactNo: validateMobile(formData.contactNo) || "",
       otp: showOTP ? validateOTP(formData.otp) || "" : "",
     };
@@ -56,8 +59,10 @@ const Login: React.FC = () => {
 
     setLoading(true);
     try {
+
       const response = await axios.post("http://localhost:8081/users/generate-otp", {
         memberId: formData.memberId,
+       // dateOfBirth: formData.dateOfBirth,
         contactNo: formData.contactNo,
       });
 
@@ -83,6 +88,7 @@ const Login: React.FC = () => {
 
     setLoading(true);
     try {
+
       const response = await axios.post("http://localhost:8081/users/validate-otp", {
         memberId: formData.memberId,
         otp: formData.otp,
@@ -128,6 +134,8 @@ const Login: React.FC = () => {
             required
             disabled={showOTP}
           />
+
+       
 
           <Input
             icon={Phone}

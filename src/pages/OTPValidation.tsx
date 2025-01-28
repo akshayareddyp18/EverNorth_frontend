@@ -5,6 +5,7 @@ function OTPValidation() {
   const [isValid, setIsValid] = useState<boolean | null>(null);
   const [message, setMessage] = useState('');
 
+  const navigate = useNavigate();
   // The system's OTP (this would usually be generated dynamically or sent to the user)
   const correctOtp = '123456';
 
