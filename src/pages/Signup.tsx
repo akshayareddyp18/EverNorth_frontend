@@ -97,7 +97,7 @@ function Signup() {
     e.preventDefault();
     if (validateForm()) {
       alert("Signup Successful!");
-      navigate("/welcome");
+      navigate("/Login");
     }
   };
 

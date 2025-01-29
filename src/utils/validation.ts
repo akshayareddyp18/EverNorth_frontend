@@ -16,7 +16,7 @@ export const validationSchemas = {
       const today = new Date();
       return dob < today;
     }, 'Invalid date of birth'),
-    mobileNumber: z.string().regex(phoneRegex, 'Invalid mobile number'),
+    email: z.string().regex(emailRegex, 'Invalid email address'),
   }),
 
   personalInfo: z.object({
@@ -171,11 +171,12 @@ export const validateMemberId = (memberId: string): string | null => {
 //  return null;
 //};
 
-export const validateMobile = (mobile: string): string | null => {
-  if (!mobile) return 'Mobile number is required';
-  if (!/^\d{10}$/.test(mobile)) return 'Mobile number must be 10 digits';
+export const validateEmail = (email: string): string | null => {
+  if (!email) return 'Email is required';
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return 'Invalid email format';
   return null;
 };
+
 
 export const validateOTP = (otp: string): string | null => {
   if (!otp) return 'OTP is required';

@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 function OTPValidation() {
   const [otp, setOtp] = useState('');
   const [isValid, setIsValid] = useState<boolean | null>(null);
   const [message, setMessage] = useState('');
 
   const navigate = useNavigate();
-  // The system's OTP (this would usually be generated dynamically or sent to the user)
-  const correctOtp = '123456';
+  const correctOtp = '123456'; // Replace with dynamic OTP validation
 
   const handleOtpChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setOtp(e.target.value);
@@ -21,8 +21,8 @@ function OTPValidation() {
       setMessage('OTP is valid!');
       setIsValid(true);
       setTimeout(() => {
-      navigate('/welcome'); // Navigate to welcome page
-      }, 1000); 
+        navigate('/welcome');
+      }, 1000);
     } else {
       setMessage('Invalid OTP. Please try again.');
       setIsValid(false);
@@ -55,7 +55,7 @@ function OTPValidation() {
           <div
             style={{
               ...styles.message,
-              color: isValid === true ? 'green' : isValid === false ? 'red' : 'black',
+              color: isValid === true ? 'green' : isValid === false ? 'red' : '#333',
             }}
           >
             {message}
@@ -66,21 +66,21 @@ function OTPValidation() {
   );
 }
 
-// Define types for styles
+// Define styles with a modern UI look
 const styles: { [key: string]: React.CSSProperties } = {
   container: {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     minHeight: '100vh',
-    backgroundColor: '#f4f7fc',
+    backgroundColor: '#eaf2ff', // Light blue background
     padding: '20px',
   },
   box: {
     backgroundColor: '#fff',
-    borderRadius: '8px',
-    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-    padding: '20px',
+    borderRadius: '10px',
+    boxShadow: '0 5px 15px rgba(0, 0, 0, 0.15)',
+    padding: '25px',
     width: '100%',
     maxWidth: '400px',
     textAlign: 'center',
@@ -88,41 +88,53 @@ const styles: { [key: string]: React.CSSProperties } = {
   header: {
     marginBottom: '20px',
     fontSize: '24px',
-    color: '#333',
+    fontWeight: 'bold',
+    color: '#2c3e50',
   },
   formGroup: {
-    marginBottom: '15px',
+    marginBottom: '20px',
   },
   label: {
     display: 'block',
-    fontSize: '14px',
+    fontSize: '16px',
+    fontWeight: '500',
     marginBottom: '8px',
-    color: '#555',
+    color: '#34495e',
   },
   input: {
     width: '100%',
-    padding: '10px',
-    fontSize: '16px',
-    border: '1px solid #ddd',
-    borderRadius: '4px',
+    padding: '12px',
+    fontSize: '18px',
+    border: '2px solid #3498db',
+    borderRadius: '6px',
     textAlign: 'center',
-    maxWidth: '200px',
-    marginBottom: '20px',
+    maxWidth: '220px',
+    margin: '0 auto',
+    display: 'block',
+    outline: 'none',
   },
   button: {
     padding: '12px 24px',
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#007bff', // Blue button
     color: 'white',
     border: 'none',
-    borderRadius: '4px',
+    borderRadius: '6px',
     fontSize: '16px',
+    fontWeight: 'bold',
     cursor: 'pointer',
     transition: 'background-color 0.3s',
+    marginTop: '15px',
   },
   message: {
     marginTop: '15px',
-    fontSize: '14px',
+    fontSize: '16px',
+    fontWeight: '500',
   },
 };
+
+// Add hover effect separately
+//styles.button[':hover'] = {
+//  backgroundColor: '#0056b3', // Darker blue on hover
+//};
 
 export default OTPValidation;

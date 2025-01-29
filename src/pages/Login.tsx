@@ -1,52 +1,27 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { UserCheck, Phone, ArrowLeft } from "lucide-react";
+import { UserCheck, Mail, ArrowLeft } from "lucide-react";
 import Input from "../components/shared/Input";
 import Button from "../components/shared/Button";
-import { useAuth } from "../context/AuthContext";
 import toast from "react-hot-toast";
-import axios from "axios";
-import {
-  validateMemberId,
-  validateMobile,
-  validateOTP,
-} from "../utils/validation";
+import { validateMemberId, validateEmail } from "../utils/validation";
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
-  const { login } = useAuth();
   const [formData, setFormData] = useState({
     memberId: "",
-    //dateOfBirth: "",
-    contactNo: "",
-    otp: "",
+    email: "",
   });
   const [errors, setErrors] = useState({
     memberId: "",
-    //dateOfBirth: "",
-    contactNo: "",
-    otp: "",
+    email: "",
   });
-  const [showOTP, setShowOTP] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [timer, setTimer] = useState(0);
-
-  useEffect(() => {
-    let interval: any;
-    if (timer > 0) {
-      interval = setInterval(() => {
-        setTimer((prev) => prev - 1);
-      }, 1000);
-    }
-    return () => clearInterval(interval);
-  }, [timer]);
 
   const validateForm = (): boolean => {
     const newErrors = {
       memberId: validateMemberId(formData.memberId) || "",
-      //dateOfBirth: validateDOB(formData.dateOfBirth) || "",
-      contactNo: validateMobile(formData.contactNo) || "",
-      otp: showOTP ? validateOTP(formData.otp) || "" : "",
+      email: validateEmail(formData.email) || "",
     };
 
     setErrors(newErrors);
@@ -59,50 +34,17 @@ const Login: React.FC = () => {
 
     setLoading(true);
     try {
+      // Simulating OTP generation
+      const otp = Math.floor(100000 + Math.random() * 900000).toString(); // Generate a 6-digit OTP
 
-      const response = await axios.post("http://localhost:8081/users/generate-otp", {
-        memberId: formData.memberId,
-       // dateOfBirth: formData.dateOfBirth,
-        contactNo: formData.contactNo,
+      toast.success(`OTP sent successfully to your email: ${otp}`);
+
+      // Navigate to the OTP validation page with the hardcoded OTP and form data
+      navigate("/otp-validation", {
+        state: { memberId: formData.memberId, email: formData.email, otp },
       });
-
-      if (response.status === 200) {
-        setShowOTP(true);
-        setTimer(30);
-        toast.success("OTP sent successfully!");
-      } else {
-        toast.error(`Unexpected status code: ${response.status}`);
-      }
     } catch (error: any) {
-      toast.error(
-        error?.response?.data?.message || `Failed to generate OTP.`
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleValidate = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validateForm()) return;
-
-    setLoading(true);
-    try {
-
-      const response = await axios.post("http://localhost:8081/users/validate-otp", {
-        memberId: formData.memberId,
-        otp: formData.otp,
-      });
-
-      if (response.status === 200) {
-        login();
-        navigate("/profile-setup");
-        toast.success("Validation successful!");
-      } else {
-        toast.error("Invalid OTP. Please try again.");
-      }
-    } catch (error: any) {
-      toast.error(error?.response?.data?.message || "Invalid OTP. Please try again.");
+      toast.error("Failed to generate OTP.");
     } finally {
       setLoading(false);
     }
@@ -119,11 +61,11 @@ const Login: React.FC = () => {
           />
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Login</h1>
-            <p className="mt-1 text-gray-600">Please verify your identity to continue</p>
+            <p className="mt-1 text-gray-600">Enter your details to receive an OTP</p>
           </div>
         </div>
 
-        <form onSubmit={showOTP ? handleValidate : handleGenerateOTP} className="space-y-4">
+        <form onSubmit={handleGenerateOTP} className="space-y-4">
           <Input
             icon={UserCheck}
             label="Member ID"
@@ -132,58 +74,21 @@ const Login: React.FC = () => {
             onChange={(e) => setFormData({ ...formData, memberId: e.target.value })}
             error={errors.memberId}
             required
-            disabled={showOTP}
           />
-
-       
 
           <Input
-            icon={Phone}
-            label="Mobile Number"
-            type="tel"
-            placeholder="Enter 10-digit mobile number"
-            value={formData.contactNo}
-            onChange={(e) => setFormData({ ...formData, contactNo: e.target.value })}
-            error={errors.contactNo}
+            icon={Mail}
+            label="Email ID"
+            type="email"
+            placeholder="Enter your email"
+            value={formData.email}
+            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+            error={errors.email}
             required
-            disabled={showOTP}
           />
 
-          {showOTP && (
-            <div className="space-y-2">
-              <Input
-                label="OTP"
-                type="text"
-                placeholder="Enter 6-digit OTP"
-                value={formData.otp}
-                onChange={(e) => setFormData({ ...formData, otp: e.target.value })}
-                error={errors.otp}
-                required
-                maxLength={6}
-              />
-              {timer > 0 ? (
-                <p className="text-sm text-gray-600">Resend OTP in {timer} seconds</p>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setTimer(30);
-                    toast.success("New OTP sent successfully!");
-                  }}
-                  className="text-sm text-indigo-600 hover:text-indigo-500"
-                >
-                  Resend OTP
-                </button>
-              )}
-            </div>
-          )}
-
-          <Button
-            type="submit"
-            className="w-full"
-            disabled={loading || (showOTP && timer === 0)}
-          >
-            {loading ? "Processing..." : showOTP ? "Validate OTP" : "Generate OTP"}
+          <Button type="submit" className="w-full" disabled={loading}>
+            {loading ? "Sending OTP..." : "Generate OTP"}
           </Button>
         </form>
       </div>
